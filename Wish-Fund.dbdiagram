@@ -1,0 +1,108 @@
+Table User {
+  userId integer [pk, unique]
+  userNick varchar [not null, unique]
+  userPw varchar [not null]
+  userName varchar [not null]
+  userPhone varchar [not null, unique]
+  userBirth datetime
+  userAcct varchar [unique]
+  regAt timestamp
+  uptAt timestamp
+  delAt timestamp
+}
+
+Table Address {
+  addrId integer [pk, unique]
+  userId integer [ref: > User.userId]
+  addrAddr varchar [not null]
+  addrDetl varchar
+  addrNick varchar 
+  isDef bool [default: false]
+}
+
+Table Friend {
+  userId integer [pk, ref: > User.userId]
+  frdId integer [pk, ref: > User.userId]
+  status bit
+  regAt timestamp
+}
+
+Table Funding {
+  fundId integer [pk, unique]
+  fundUser integer [ref: > User.userId]
+  fundTitle varchar [not null]
+  fundCont varchar [not null]
+  fundImg integer [ref: > Image.imgId]
+  fundTheme enum [not null]
+  fundPubl bool [default: true]
+  fundGoal integer [not null]
+  fundSum integer [default: 0]
+  fundAddr integer [not null, ref: > Address.addrId]
+  endAt timestamp [not null]
+  regAt timestamp
+  uptAt timestamp
+}
+
+Table Comment {
+  comId integer [pk]
+  fundId integer [not null, ref: > Funding.fundId]
+  authorId integer [not null, ref: > User.userId]
+  content varchar [not null]
+  regAt timestamp
+  isMod bool [not null, default: false]
+  isDel bool [not null, default: false]
+}
+
+Table Gift {
+  giftId integer [pk, unique]
+  fundId integer [ref: > Funding.fundId]
+  giftUrl varchar [not null]
+  giftCrd integer [not null]
+  giftOpt varchar
+  giftCont varchar
+  gitfImg integer [ref: > Image.imgId]
+}
+
+Table Donation {
+  donId integer [pk, unique]
+  fundId integer [ref: > Funding.fundId]
+  userId integer [ref: > User.userId]
+  orderId varchar [not null, unique] // 비회원이 후원한 경우 주문번호(order id)를 통해서 자신의 후원 정보를 볼 수 있어야 하기 때문.
+  donAmnt integer [not null]
+  regAt timestamp
+}
+
+Table RollingPaper {
+  rollId integer [pk, ref: - Donation.donId]
+  rollImg integer [ref: > Image.imgId]
+  rollMsg varchar [default: '축하해요']
+}
+
+Table Notification {
+  notiId integer [pk]
+  recvId integer [not null, ref: > User.userId]
+  sendId integer [not null, ref: > User.userId]
+  notiType enum [not null]
+  reqType enum [not null]
+  subId integer
+  notiTime timestamp
+}
+
+Table News {
+  newsId integer [pk]
+  userId integer [not null, ref: > User.userId]
+  newsType enum [not null]
+  newsTime timestamp
+}
+
+Table Gratitude {
+  fundId integer [pk, ref: - Funding.fundId]
+  gratTitle varchar [not null]
+  gratCont varchar [not null]
+  gratImg integer [not null, ref: > Image.imgId]
+}
+
+Table Image {
+  imgId integer [pk, not null]
+  imgUrl varchar [not null]
+}
