@@ -106,3 +106,10 @@ Table Image {
   imgId integer [pk, not null]
   imgUrl varchar [not null]
 }
+
+Enum FundTheme {
+  BIRTHDAY
+  ANNIVERSARY
+  DONATION
+}
+
