@@ -4,8 +4,10 @@ Table User {
   userPw varchar [not null]
   userName varchar [not null]
   userPhone varchar [not null, unique]
+  userEmail varchar
   userBirth datetime
   userAcct varchar [unique]
+  userImg integer [ref: > Image.imgId]
   regAt timestamp
   uptAt timestamp
   delAt timestamp
@@ -32,7 +34,6 @@ Table Funding {
   fundUser integer [ref: > User.userId]
   fundTitle varchar [not null]
   fundCont varchar [not null]
-  fundImg integer [ref: > Image.imgId]
   fundTheme enum [not null]
   fundPubl bool [default: true]
   fundGoal integer [not null]
@@ -60,7 +61,6 @@ Table Gift {
   giftCrd integer [not null]
   giftOpt varchar
   giftCont varchar
-  gitfImg integer [ref: > Image.imgId]
 }
 
 Table Donation {
@@ -96,15 +96,16 @@ Table News {
 }
 
 Table Gratitude {
-  fundId integer [pk, ref: - Funding.fundId]
+  gratId integer [pk, ref: - Funding.fundId]
   gratTitle varchar [not null]
   gratCont varchar [not null]
-  gratImg integer [not null, ref: > Image.imgId]
 }
 
 Table Image {
   imgId integer [pk, not null]
   imgUrl varchar [not null]
+  imgType enum
+  subId integer 
 }
 
 Table Account {
@@ -131,50 +132,51 @@ Enum NotiType {
 }
 
 Enum NotiType {
-        FriendRequest = 'FriendRequest' // 들어오는 친구 요청
-    ,   FriendAccept = 'FriendAccept' // 내 요청에 대한 친구의 수락
-    ,   FundClose = 'FundClose' // 내 펀딩 마감 
-    ,   FundAchieve = 'FundAchieve' // 내 펀딩 달성
-    ,   DonateFundClose = 'DonateFundClose' // 내가 후원한 펀딩 마
-    ,   AskGratitude = 'AskGratitude'
-    ,   DonateGratitude = 'DonateGratitude'
-    ,   NewDonate = 'NewDonate'
-    ,
+    IncomingFollow // = 'IncomingFollow' 들어오는 친구 요청
+    AcceptFollow // = 'AcceptFollow' 내 요청에 대한 친구의 수락
+    FundClose // = 'FundClose' 내 펀딩 마감 
+    FundAchieve // = 'FundAchieve' 내 펀딩 달성
+    NewDonate // = 'NewDonate' 내 펀딩에 들어온 새로운 후원
+    DonatedFundClose // = 'DonatedFundClose' 내가 후원한 펀딩 마감
+    WriteGratitude // = 'WriteGratitude' 감사인사 작성 권유
+    CheckGratitude // = 'CheckGratitude' 내가 후원한 펀딩 감사인사 확인
 }
 
-Enum News {
-  NEW_FUNDING_FROM_FRIEND // 친구의 새로운 펀딩 개설
-  DUE_FUNDING_FROM_FRIEND // 친구의 펀딩 마감기한 임박
-  GRATITUDE_FROM_FRIEND // 친구의 펀딩 감사인사
+Enum NewsType {
+  NewFunding // 친구의 새로운 펀딩 개설
+  DueFunding // 친구의 펀딩 마감기한 임박
+  Gratitude // 친구의 펀딩 감사인사
 }
 
 Enum ImgType {
-  GRATITUDE
-  GIFT
-  FUNDING
+  Gratitude
+  Gift
+  Funding
+  User
+  RollingPaper
 }
 
 Enum BankType {
-  KAKAOBANK
-  NONGHYUP
-  KOOKMIN
-  SHINHAN
-  WOORI
-  IBK
-  HANA
-  DAEGU
-  KYONGNAM
-  GWANGJU
-  BUSAN
-  JEJU
-  DEUTSCHEBANK
-  KDB
-  NFCF
-  KFCC
-  SUHYUP
-  NACUFOK
-  CITYBANK
-  TOSSBANK
-  SCBANK
-  KBANK
+  Kakaobank
+  Nonghyup
+  Kookmin
+  Shinhan
+  Woori
+  Ibk
+  Hana
+  Daegu
+  Kyongnam
+  Gwangju
+  Busan
+  Jeju
+  Deutschebank
+  Kdb
+  Nfcf
+  Kfcc
+  Suhyup
+  Nacufok
+  Citybank
+  Tossbank
+  Scbank
+  Kbank
 }
