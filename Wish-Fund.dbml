@@ -107,6 +107,12 @@ Table Image {
   imgUrl varchar [not null]
 }
 
+Table Account {
+  accId integer [pk, not null]
+  bank  enum [not null]
+  accNum string
+}
+
 Enum FundTheme {
   BIRTHDAY
   ANNIVERSARY
@@ -124,6 +130,18 @@ Enum NotiType {
   INCOMING_DONATION // 내 펀딩에 들어온 새로운 후원
 }
 
+Enum NotiType {
+        FriendRequest = 'FriendRequest' // 들어오는 친구 요청
+    ,   FriendAccept = 'FriendAccept' // 내 요청에 대한 친구의 수락
+    ,   FundClose = 'FundClose' // 내 펀딩 마감 
+    ,   FundAchieve = 'FundAchieve' // 내 펀딩 달성
+    ,   DonateFundClose = 'DonateFundClose' // 내가 후원한 펀딩 마
+    ,   AskGratitude = 'AskGratitude'
+    ,   DonateGratitude = 'DonateGratitude'
+    ,   NewDonate = 'NewDonate'
+    ,
+}
+
 Enum News {
   NEW_FUNDING_FROM_FRIEND // 친구의 새로운 펀딩 개설
   DUE_FUNDING_FROM_FRIEND // 친구의 펀딩 마감기한 임박
@@ -134,4 +152,29 @@ Enum ImgType {
   GRATITUDE
   GIFT
   FUNDING
+}
+
+Enum BankType {
+  KAKAOBANK
+  NONGHYUP
+  KOOKMIN
+  SHINHAN
+  WOORI
+  IBK
+  HANA
+  DAEGU
+  KYONGNAM
+  GWANGJU
+  BUSAN
+  JEJU
+  DEUTSCHEBANK
+  KDB
+  NFCF
+  KFCC
+  SUHYUP
+  NACUFOK
+  CITYBANK
+  TOSSBANK
+  SCBANK
+  KBANK
 }
