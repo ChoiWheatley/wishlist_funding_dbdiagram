@@ -120,6 +120,12 @@ Enum FundTheme {
   DONATION
 }
 
+Enum DonationStatus {
+  Donated
+  WaitingRefund
+  RefundComplete
+}
+
 Enum NotiType {
   INCOMING_FOLLOW // 들어오는 친구 요청
   ACCEPT_FOLLOW // 내 요청에 대한 친구의 수락
@@ -157,26 +163,26 @@ Enum ImgType {
 }
 
 Enum BankType {
-  Kakaobank
-  Nonghyup
-  Kookmin
-  Shinhan
-  Woori
-  Ibk
-  Hana
-  Daegu
-  Kyongnam
-  Gwangju
-  Busan
-  Jeju
-  Deutschebank
-  Kdb
-  Nfcf
-  Kfcc
-  Suhyup
-  Nacufok
-  Citybank
-  Tossbank
-  Scbank
-  Kbank
+  Kakaobank  // 카카오뱅크
+  Nonghyup  // 농협
+  Kookmin  // 국민은행
+  Shinhan  // 신한은행
+  Woori  // 우리은행
+  Ibk  // IBK기업은행
+  Hana  // 하나은행
+  Daegu  // 대구은행
+  Kyongnam  // 경남은행
+  Gwangju  // 광주은행
+  Busan  // 부산은행
+  Jeju  // 제주은행
+  Deutschebank  // 도이치은행
+  Kdb  // KDB은행
+  Nfcf  // 산림조합
+  Kfcc  // 새마을금고
+  Suhyup  // 수협
+  Nacufok // 신협
+  Citybank // 씨티은행
+  Tossbank  // 토스뱅크
+  Scbank  // SC제일은행
+  Kbank  // 케이뱅
 }
