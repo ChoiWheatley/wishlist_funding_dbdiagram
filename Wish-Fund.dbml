@@ -115,9 +115,9 @@ Table Account {
 }
 
 Enum FundTheme {
-  BIRTHDAY
-  ANNIVERSARY
-  DONATION
+  Birthday
+  Anniversary
+  Donation
 }
 
 Enum DonationStatus {
@@ -127,14 +127,13 @@ Enum DonationStatus {
 }
 
 Enum NotiType {
-  INCOMING_FOLLOW // 들어오는 친구 요청
-  ACCEPT_FOLLOW // 내 요청에 대한 친구의 수락
-  DUE_MY_FUNDING // 내 펀딩 마감
-  SATISFYING_MY_FUNDING // 내 펀딩 달성
-  DUE_DONATED_FUNDING // 내가 후원한 펀딩 마감
-  WRITE_GRATITUDE // 감사인사 작성 권유
-  CHECK_GRATITUDE // 내가 후원한 펀딩 감사인사 확인
-  INCOMING_DONATION // 내 펀딩에 들어온 새로운 후원
+  IncomingFollow // 들어오는 친구 요청
+  AcceptFollow // 내 요청에 대한 친구의 수락
+  SatisfyingMyFunding //내 펀딩 달성
+  DueDonatedFunding //내가 후원한 펀딩 마감
+  WriteGratitude //감사 인사 작성 권유
+  CheckGratitude //내가 후원한 펀딩 감사인사 확인
+  IncomingDonation //내 펀딩에 들어온 새로운 후원
 }
 
 Enum NotiType {
