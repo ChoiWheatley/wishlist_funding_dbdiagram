@@ -31,6 +31,7 @@ Table Friend {
 
 Table Funding {
   fundId integer [pk, unique]
+  fundUuid string [pk, unique]
   fundUser integer [ref: > User.userId]
   fundTitle varchar [not null]
   fundCont varchar [not null]
