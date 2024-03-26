@@ -6,7 +6,7 @@ Table User {
   userPhone varchar [not null, unique]
   userEmail varchar
   userBirth datetime
-  userAcct varchar [unique]
+  accId integer [unique, ref: > Account.accId]
   userImg integer [ref: > Image.imgId]
   regAt timestamp
   uptAt timestamp
@@ -16,9 +16,10 @@ Table User {
 Table Address {
   addrId integer [pk, unique]
   userId integer [ref: > User.userId]
-  addrAddr varchar [not null]
-  addrDetl varchar
-  addrNick varchar 
+  addrRoad varchar [not null]
+  addrDetl varchar [not null]
+  addrZip integer [not null]
+  addrNick varchar
   isDef bool [default: false]
 }
 
@@ -31,6 +32,7 @@ Table Friend {
 
 Table Funding {
   fundId integer [pk, unique]
+  fundUuid varchar [unique]
   fundUser integer [ref: > User.userId]
   fundTitle varchar [not null]
   fundCont varchar [not null]
@@ -42,6 +44,7 @@ Table Funding {
   endAt timestamp [not null]
   regAt timestamp
   uptAt timestamp
+  delAt timestamp
 }
 
 Table Comment {
@@ -67,6 +70,7 @@ Table Donation {
   donId integer [pk, unique]
   fundId integer [ref: > Funding.fundId]
   userId integer [ref: > User.userId]
+  donStat enum [not null]
   orderId varchar [not null, unique] // 비회원이 후원한 경우 주문번호(order id)를 통해서 자신의 후원 정보를 볼 수 있어야 하기 때문.
   donAmnt integer [not null]
   regAt timestamp
@@ -99,6 +103,8 @@ Table Gratitude {
   gratId integer [pk, ref: - Funding.fundId]
   gratTitle varchar [not null]
   gratCont varchar [not null]
+  regAt timestamp
+  isDel bool [default: false]
 }
 
 Table Image {
@@ -111,7 +117,7 @@ Table Image {
 Table Account {
   accId integer [pk, not null]
   bank  enum [not null]
-  accNum string
+  accNum string [not null]
 }
 
 Enum FundTheme {
