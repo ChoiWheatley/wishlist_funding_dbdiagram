@@ -2,7 +2,7 @@
 
 [DBML](https://dbml.dbdiagram.io/home/), a database markup syntax supported with <https://dbdiagram.io>
 
-![output](./output.svg)
+<img src="./output.svg">
 
 ## Useful Tools
 
