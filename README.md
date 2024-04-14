@@ -2,6 +2,8 @@
 
 [DBML](https://dbml.dbdiagram.io/home/), a database markup syntax supported with <https://dbdiagram.io>
 
+<img src="./output.svg">
+
 ## Useful Tools
 
 - <https://github.com/softwaretechnik-berlin/dbml-renderer> renders DBML into SVG images
