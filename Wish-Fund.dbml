@@ -18,7 +18,7 @@ Table Address {
   userId integer [ref: > User.userId]
   addrRoad varchar [not null]
   addrDetl varchar [not null]
-  addrZip integer [not null]
+  addrZip varchar [not null]
   addrNick varchar
   isDef bool [default: false]
 }
@@ -190,4 +190,12 @@ Enum BankType {
   Tossbank  // 토스뱅크
   Scbank  // SC제일은행
   Kbank  // 케이뱅
+}
+
+Enum ReqType {
+  NotResponse // 00 // 요청에 응답하지 않은 상태
+  Accept // 01 // 요청을 수락한 상태
+  Refuse // 02 // 요청을 거절한 상태
+  UnWritten // 03 // 감사인사를 작성하지 않은 상태
+  Written // 04 // 감사인사를 작성한 상태
 }
