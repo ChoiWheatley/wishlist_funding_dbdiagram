@@ -41,6 +41,7 @@ Table Funding {
   fundGoal integer [not null]
   fundSum integer [default: 0]
   fundAddr integer [not null, ref: > Address.addrId]
+  defaultImgId integer [null, ref: - Image.imgId]
   endAt timestamp [not null]
   regAt timestamp
   uptAt timestamp
@@ -79,6 +80,7 @@ Table Donation {
 Table RollingPaper {
   rollId integer [pk, ref: - Donation.donId]
   rollImg integer [ref: > Image.imgId]
+  defaultImgId integer [null, ref: - Image.imgId]
   rollMsg varchar [default: '축하해요']
 }
 
@@ -103,6 +105,7 @@ Table Gratitude {
   gratId integer [pk, ref: - Funding.fundId]
   gratTitle varchar [not null]
   gratCont varchar [not null]
+  defaultImgId integer [null, ref: - Image.imgId]
   regAt timestamp
   isDel bool [default: false]
 }
