@@ -1,16 +1,7 @@
-Table User {
-  userId integer [pk, unique]
-  userNick varchar [not null, unique]
-  userPw varchar [not null]
-  userName varchar [not null]
-  userPhone varchar [not null, unique]
-  userEmail varchar
-  userBirth datetime
-  accId integer [unique, ref: > Account.accId]
-  userImg integer [ref: > Image.imgId]
-  regAt timestamp
-  uptAt timestamp
-  delAt timestamp
+Table Account {
+  accId integer [pk]
+  bank  enum [not null]
+  accNum string [not null]
 }
 
 Table Address {
@@ -19,14 +10,52 @@ Table Address {
   addrRoad varchar [not null]
   addrDetl varchar [not null]
   addrZip varchar [not null]
-  addrNick varchar
+  addrNick varchar [not null]
+  recvName varchar [not null]
+  recvPhone varchar [not null]
+  recvReq varchar
   isDef bool [default: false]
+}
+
+Table Comment {
+  comId integer [pk]
+  fundId integer [not null, ref: > Funding.fundId]
+  authorId integer [not null, ref: > User.userId]
+  content varchar [not null]
+  regAt timestamp
+  isMod bool [not null, default: false]
+  isDel bool [not null, default: false]
+}
+
+Table Donation {
+  donId integer [pk, unique]
+  fundId integer [ref: > Funding.fundId]
+  userId integer [ref: > User.userId]
+  donStat enum [not null]
+  orderId varchar [not null, unique] // 비회원이 후원한 경우 주문번호(order id)를 통해서 자신의 후원 정보를 볼 수 있어야 하기 때문.
+  donAmnt integer [not null, default: 0]
+  regAt timestamp
+  delAt timestamp
+}
+
+Table Error {
+  errId integer [pk]
+  method varchar [not null]
+  url varchar [not null]
+  agent varchar [not null]
+  ip varchar [not null]
+  parameters varchar [not null]
+  httpCode varchar [not null]
+  errCode varchar
+  errName varchar [not null]
+  errStack varchar [not null]
+  regAt timestamp
 }
 
 Table Friend {
   userId integer [pk, ref: > User.userId]
   frdId integer [pk, ref: > User.userId]
-  status bit
+  status enum [not null]
   regAt timestamp
 }
 
@@ -40,22 +69,17 @@ Table Funding {
   fundPubl bool [default: true]
   fundGoal integer [not null]
   fundSum integer [default: 0]
-  fundAddr integer [not null, ref: > Address.addrId]
+  fundAddrRoad varchar [not null]
+  fundAddrDetl varchar [not null]
+  fundAddrZip varchar [not null]
+  fundRecvName varchar [not null]
+  fundRecvPhone varchar [not null]
+  fundRecvReq varchar
   defaultImgId integer [null, ref: - Image.imgId]
   endAt timestamp [not null]
   regAt timestamp
   uptAt timestamp
   delAt timestamp
-}
-
-Table Comment {
-  comId integer [pk]
-  fundId integer [not null, ref: > Funding.fundId]
-  authorId integer [not null, ref: > User.userId]
-  content varchar [not null]
-  regAt timestamp
-  isMod bool [not null, default: false]
-  isDel bool [not null, default: false]
 }
 
 Table Gift {
@@ -65,44 +89,11 @@ Table Gift {
   giftCrd integer [not null]
   giftOpt varchar
   giftCont varchar
-}
-
-Table Donation {
-  donId integer [pk, unique]
-  fundId integer [ref: > Funding.fundId]
-  userId integer [ref: > User.userId]
-  donStat enum [not null]
-  orderId varchar [not null, unique] // 비회원이 후원한 경우 주문번호(order id)를 통해서 자신의 후원 정보를 볼 수 있어야 하기 때문.
-  donAmnt integer [not null]
-  regAt timestamp
-}
-
-Table RollingPaper {
-  rollId integer [pk, ref: - Donation.donId]
-  rollImg integer [ref: > Image.imgId]
-  defaultImgId integer [null, ref: - Image.imgId]
-  rollMsg varchar [default: '축하해요']
-}
-
-Table Notification {
-  notiId integer [pk]
-  recvId integer [not null, ref: > User.userId]
-  sendId integer [not null, ref: > User.userId]
-  notiType enum [not null]
-  reqType enum [not null]
-  subId integer
-  notiTime timestamp
-}
-
-Table News {
-  newsId integer [pk]
-  userId integer [not null, ref: > User.userId]
-  newsType enum [not null]
-  newsTime timestamp
+  imgId integer [not null, ref: < Image.imgId]
 }
 
 Table Gratitude {
-  gratId integer [pk, ref: - Funding.fundId]
+  gratId integer [pk]
   gratTitle varchar [not null]
   gratCont varchar [not null]
   defaultImgId integer [null, ref: - Image.imgId]
@@ -117,57 +108,61 @@ Table Image {
   subId integer 
 }
 
-Table Account {
-  accId integer [pk, not null]
-  bank  enum [not null]
-  accNum string [not null]
+Table Notification {
+  notiId integer [pk]
+  recvId integer [not null, ref: > User.userId]
+  sendId integer [not null, ref: > User.userId]
+  notiType enum [not null]
+  reqType enum [not null]
+  subId varchar
+  notiTime timestamp
 }
 
-Enum FundTheme {
-  Birthday
-  Anniversary
-  Donation
+Table OpenBankToken {
+  obtId integer [pk]
+  accessToken varchar [not null]
+  refreshToken varchar [not null]
+  expiresIn integer [not null]
+  userSeq integer [not null]
 }
 
-Enum DonationStatus {
-  Donated
-  WaitingRefund
-  RefundComplete
+Table RollingPaper {
+  rollId integer [pk, ref: - Donation.donId]
+  defaultImgId integer [null, ref: - Image.imgId]
+  fundId integer
+  rollMsg varchar [default: '축하해요']
+  delAt timestamp
 }
 
-Enum NotiType {
-  IncomingFollow // 들어오는 친구 요청
-  AcceptFollow // 내 요청에 대한 친구의 수락
-  SatisfyingMyFunding //내 펀딩 달성
-  DueDonatedFunding //내가 후원한 펀딩 마감
-  WriteGratitude //감사 인사 작성 권유
-  CheckGratitude //내가 후원한 펀딩 감사인사 확인
-  IncomingDonation //내 펀딩에 들어온 새로운 후원
+Table User {
+  userId integer [pk, unique]
+  authId varchar [null]
+  authType enum
+  userNick varchar [unique]
+  userPw varchar
+  userName varchar
+  userPhone varchar [unique]
+  userEmail varchar
+  userBirth datetime
+  userAcc integer [ref: - Account.accId]
+  defaultImgId integer [ref: > Image.imgId]
+  regAt timestamp
+  uptAt timestamp
+  delAt timestamp
 }
 
-Enum NotiType {
-    IncomingFollow // = 'IncomingFollow' 들어오는 친구 요청
-    AcceptFollow // = 'AcceptFollow' 내 요청에 대한 친구의 수락
-    FundClose // = 'FundClose' 내 펀딩 마감 
-    FundAchieve // = 'FundAchieve' 내 펀딩 달성
-    NewDonate // = 'NewDonate' 내 펀딩에 들어온 새로운 후원
-    DonatedFundClose // = 'DonatedFundClose' 내가 후원한 펀딩 마감
-    WriteGratitude // = 'WriteGratitude' 감사인사 작성 권유
-    CheckGratitude // = 'CheckGratitude' 내가 후원한 펀딩 감사인사 확인
+Table News {
+  newsId integer [pk]
+  userId integer [not null, ref: > User.userId]
+  newsType enum [not null]
+  newsTime timestamp
 }
 
-Enum NewsType {
-  NewFunding // 친구의 새로운 펀딩 개설
-  DueFunding // 친구의 펀딩 마감기한 임박
-  Gratitude // 친구의 펀딩 감사인사
-}
-
-Enum ImgType {
-  Gratitude
-  Gift
-  Funding
-  User
-  RollingPaper
+Enum AuthType {
+  Kakao
+  Naver
+  Google
+  Jwt
 }
 
 Enum BankType {
@@ -185,7 +180,6 @@ Enum BankType {
   Jeju  // 제주은행
   Deutschebank  // 도이치은행
   Kdb  // KDB은행
-  Nfcf  // 산림조합
   Kfcc  // 새마을금고
   Suhyup  // 수협
   Nacufok // 신협
@@ -193,6 +187,121 @@ Enum BankType {
   Tossbank  // 토스뱅크
   Scbank  // SC제일은행
   Kbank  // 케이뱅
+  Sbi // SBI저축은행
+  Kopo // 우체국은행
+  Jeonbuk // 전북은행
+  Nhinvest // NH투자증권
+}
+
+Enum DefaultImgId {
+  Funding
+  Funding2
+  Funding3
+  Gratitude
+  Gratitude2
+  Gratitude3
+  RollingPaper
+  RollingPaper2
+  RollingPaper3
+  User
+  User2
+  User3
+}
+
+Enum DonationStatus {
+  Donated
+  WaitingRefund
+  RefundComplete
+}
+
+Enum ErrorCode {
+  FundingNotExists
+  FundingClosed
+  IncorrectGiftUrl
+  GratitudeAlreadyExists
+  GratitudeNotExist
+  IncorrectImageUrl
+  UserNotFound
+  UserNotUpdated
+  UserAlreadyDeleted
+  NotValidEmail
+  NotValidPhone
+  NotValidNick
+  PasswordIncorrect
+  UserFailedToCreate
+  AlreadySendRequest
+  AlreadyFriend
+  WrongNotiType
+  JwtNotExpired
+  JwtExpired
+  NotValidToken
+  TokenMissing
+  RefreshExpire
+  UserAlreadyExists
+  FailedLogout
+  RedisServerError
+  DefaultImgIdNotExist
+  AccountNotFound
+}
+
+Enum ErrorMsg {
+  FundingNotExists
+  FundingClosed
+  IncorrectGiftUrl
+  GratitudeAlreadyExists
+  GratitudeNotExist
+  IncorrectImageUrl
+  UserNotFound
+  UserNotUpdated
+  UserAlreadyDeleted
+  NotValidEmail
+  NotValidPhone
+  NotValidNick
+  PasswordIncorrect
+  UserFailedToCreate
+  AlreadySendRequest
+  AlreadyFriend
+  WrongNotiType
+  JwtNotExpired
+  JwtExpired
+  NotValidToken
+  TokenMissing
+  RefreshExpire
+  UserAlreadyExists
+  FailedLogout
+  RedisServerError
+  DefaultImgIdNotExist
+  AccountNotFound
+}
+
+Enum FriendStatus {
+  Friend
+  Requested
+}
+
+Enum FundTheme {
+  Birthday
+  Anniversary
+  Donation
+}
+
+Enum ImgType {
+  Gratitude
+  Gift
+  Funding
+  User
+  RollingPaper
+}
+
+Enum NotiType {
+  IncomingFollow // 들어오는 친구 요청
+  AcceptFollow // 내 요청에 대한 친구의 수락
+  SatisfyingMyFunding // 내 펀딩 달성
+  DueDonatedFunding // 내가 후원한 펀딩 마감
+  WriteGratitude // 감사 인사 작성 권유
+  CheckGratitude // 내가 후원한 펀딩 감사인사 확인
+  IncomingDonation // 내 펀딩에 들어온 새로운 후원
+  NewComment // 새로운 댓
 }
 
 Enum ReqType {
@@ -201,4 +310,10 @@ Enum ReqType {
   Refuse // 02 // 요청을 거절한 상태
   UnWritten // 03 // 감사인사를 작성하지 않은 상태
   Written // 04 // 감사인사를 작성한 상태
+}
+
+Enum NewsType {
+  NewFunding // 친구의 새로운 펀딩 개설
+  DueFunding // 친구의 펀딩 마감기한 임박
+  Gratitude // 친구의 펀딩 감사인사
 }
