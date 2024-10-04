@@ -106,6 +106,7 @@ Table Image {
   imgUrl varchar [not null]
   imgType enum
   subId integer 
+  creatorUserId integer [null, ref: > User.userId]
 }
 
 Table Notification {
