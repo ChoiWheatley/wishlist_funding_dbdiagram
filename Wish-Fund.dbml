@@ -296,13 +296,13 @@ Enum ImgType {
 
 Enum NotiType {
   IncomingFollow // 들어오는 친구 요청
-  AcceptFollow // 내 요청에 대한 친구의 수락
+  NewFriend // 새로운 친구
   SatisfyingMyFunding // 내 펀딩 달성
   DueDonatedFunding // 내가 후원한 펀딩 마감
   WriteGratitude // 감사 인사 작성 권유
   CheckGratitude // 내가 후원한 펀딩 감사인사 확인
   IncomingDonation // 내 펀딩에 들어온 새로운 후원
-  NewComment // 새로운 댓
+  NewComment // 새로운 댓글
 }
 
 Enum ReqType {
