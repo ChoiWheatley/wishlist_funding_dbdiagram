@@ -159,6 +159,31 @@ Table News {
   newsTime timestamp
 }
 
+Table provisional_donation {
+  provDonId integer [pk, increment, note: "Primary key, auto-increment"]
+  senderSig varchar [not null, note: "Signature of the sender"]
+  amount integer [not null, note: "Donation amount"]
+  status provisional_donation_status_enum [not null, default: 'Pending', note: "Donation status"]
+  regAt timestamp [not null, default: "now()", note: "Registration timestamp"]
+  delAt timestamp [note: "Deletion timestamp (nullable)"]
+  senderUserId integer [ref: > User.userId, note: "Foreign key to user table"]
+  fundId integer [ref: > Funding.fundId, note: "Foreign key to funding table"]
+}
+
+Table deposit {
+  depositId integer [pk, increment, note: "Primary key, auto-increment"]
+  senderSig varchar [not null, note: "Signature of the sender"]
+  receiver varchar [not null, note: "Receiver of the deposit"]
+  amount integer [not null, note: "Deposit amount"]
+  transferDate date [not null, note: "Date of transfer"]
+  depositBank varchar [not null, note: "Bank of the deposit"]
+  depositAccount varchar [not null, note: "Account receiving the deposit"]
+  withdrawalAccount varchar [not null, note: "Account for withdrawal"]
+  status deposit_status_enum [not null, note: "Status of the deposit"]
+  regAt timestamp [not null, default: "now()", note: "Registration timestamp"]
+  delAt timestamp [note: "Deletion timestamp (nullable)"]
+}
+
 Enum AuthType {
   Kakao
   Naver
@@ -317,4 +342,17 @@ Enum NewsType {
   NewFunding // 친구의 새로운 펀딩 개설
   DueFunding // 친구의 펀딩 마감기한 임박
   Gratitude // 친구의 펀딩 감사인사
+}
+
+Enum provisional_donation_status_enum {
+  Pending
+  Approved
+  Rejected
+  Refunded
+}
+
+Enum deposit_status_enum {
+  Unmatched
+  Matched
+  Orphan
 }
